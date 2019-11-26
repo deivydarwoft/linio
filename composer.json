@@ -1,0 +1,8 @@
+{
+    "require": {
+        "php": ">=5.5",
+        "guzzlehttp/guzzle": "~6.1",
+        "psr/http-message": "~1.0",
+        "rocket-labs/sellercenter-sdk-php": "20170331"
+    }
+}
