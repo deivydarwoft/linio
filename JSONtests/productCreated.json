@@ -1,0 +1,8 @@
+{
+	"event": "onProductCreated",
+  "payload": {
+  	"SellerSkus": [
+      "Eldady"
+    ]
+  }
+}

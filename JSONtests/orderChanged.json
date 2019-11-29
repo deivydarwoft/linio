@@ -1,0 +1,8 @@
+{
+	"event": "onOrderItemsStatusChanged",
+  "payload": {
+  	"OrderId": 801386,
+    "OrderItemIds": [2, 3],
+    "NewStatus": "ready_to_ship"
+  }
+}

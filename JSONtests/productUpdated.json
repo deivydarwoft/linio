@@ -1,0 +1,11 @@
+{
+	"event": "onProductUpdated",
+  "payload": {
+  	"SellerSkus": [
+      "CHILPAYATE-L",
+      "CHILPAYATE-M",
+      "CHILPAYATE-S",
+      "Eldady"
+    ]
+  }
+}

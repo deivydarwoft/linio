@@ -1,0 +1,9 @@
+{
+	"event": "onProductQcStatusChanged",
+  "payload": {
+  	"SellerSkus": [
+      "CHILPAYATE-L",
+      "CHILPAYATE-S"
+    ]
+  }
+}
