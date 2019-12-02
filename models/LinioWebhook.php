@@ -8,7 +8,7 @@ use models\ContextusClient\ContextusClient;
 use models\LinioOrder\LinioOrder;
 use models\LinioProducts\LinioProducts;
 /**
- * 
+ *  Find below all the payload definition for all entities.
  */
 class LinioWebhook
 {
@@ -17,13 +17,12 @@ class LinioWebhook
      * 
      */
     /**
-	 * @return 	array 
+	 * @return 	[Products] 
 	 */
     public function productCreated() {
 
     	// $body = @file_get_contents('php://input');
-    	$body = @file_get_contents('../JSONtests/productCreated.json');
-    	// print_r($body);die;
+    	$body = @file_get_contents('../JSONtests/productCreated.json'); // This is a test, ignore for production
     	$data = json_decode($body);
         http_response_code(200); // Returns 200 OK to the server
         if ($data) {
@@ -37,12 +36,12 @@ class LinioWebhook
      * 
      */
 	/**
-	 * @return 	array 
+	 * @return 	[Products] 
 	*/
 	public function productUpdated() {
 
 		// $body = @file_get_contents('php://input');
-		$body = @file_get_contents('../JSONtests/productUpdated.json');
+		$body = @file_get_contents('../JSONtests/productUpdated.json'); // This is a test, ignore for production
 		$data = json_decode($body);
         http_response_code(200); // Returns 200 OK to the server
         if ($data) {
@@ -54,10 +53,13 @@ class LinioWebhook
      * (i.e. Codeigniter routing).
      * 
      */
+    /**
+     * @return  [Products] 
+    */
     public function productChanged() {
 
     	// $body = @file_get_contents('php://input');
-		$body = @file_get_contents('../JSONtests/productChanged.json');
+		$body = @file_get_contents('../JSONtests/productChanged.json'); // This is a test, ignore for production
 
     	$data = json_decode($body);
         http_response_code(200); // Returns 200 OK to the server
@@ -71,14 +73,17 @@ class LinioWebhook
      * (i.e. Codeigniter routing).
      * 
      */
+    /**
+     * @return  [Order] 
+    */
     public function orderCreated() {
 
     	$body = @file_get_contents('php://input');
-		$body = @file_get_contents('../JSONtests/orderCreated.json');
+		$body = @file_get_contents('../JSONtests/orderCreated.json'); // This is a test, ignore for production
 
     	$data = json_decode($body);
         http_response_code(200); // Returns 200 OK to the server
-        // print_r($data);die;
+    
         if ($data) {
         	return LinioOrder::getOrderById($data->payload->OrderId);
         }
@@ -88,10 +93,13 @@ class LinioWebhook
      * (i.e. Codeigniter routing).
      * 
      */
+    /**
+     * @return  [Order] 
+    */
     public function orderStatusChanged() {
 
     	$body = @file_get_contents('php://input');
-		$body = @file_get_contents('../JSONtests/orderChanged.json');
+		$body = @file_get_contents('../JSONtests/orderChanged.json'); // This is a test, ignore for production
     	$data = json_decode($body);
         http_response_code(200); // Returns 200 OK to the server
         

@@ -6,6 +6,7 @@ use RocketLabs\SellerCenterSdk\Core\Response\SuccessResponseInterface;
 use RocketLabs\SellerCenterSdk\Core\Response\getMessage;
 use RocketLabs\SellerCenterSdk\Endpoint\Endpoints;
 use \Datetime;
+use \SimpleXMLElement;
 use models\ContextusClient\ContextusClient;
 use models\LinioOrder\LinioOrder;
 // date_default_timezone_set('America/Argentina/Buenos_Aires');
@@ -15,7 +16,7 @@ use models\LinioOrder\LinioOrder;
 class LinioProducts
 {
 	/**
-	 * Para construir el objeto necesitamos algunos campos obligatorios que no vienen actualmente desde contextus, por lo que se han colocado manualmente.
+	 * To build the object we need some mandatory fields that do not currently come from Contextus, so they have been manually placed.
 	 * @param 	array 	$aContextus	
 	 * @return 	object  LinioProducts
 	*/
@@ -80,7 +81,7 @@ class LinioProducts
 		return $aImages;
 	}
 	/**
-	 * Para la creacion del producto se deben tener en cuenta que se deben integrar las categorías y las marcas que nos ofrece Linio, por esta razón tendremos que hacer el mapeo de categorías, marcas, y cumplir con los requisitos de los sistemas de Linio, de la parte legal de Linio y con los parámetros y normativas del contenido publicado a través de linio. Usar las funciones getCategoryTree y getBrands para obtener los respectivos valores.
+	 * To build the product object we need the category and brands (mandatory).
 	 */
 	/**
 	 * Create products from Contextus to Linio API
@@ -126,9 +127,10 @@ class LinioProducts
 					}
 				}
 				$xCollectionRequest->build()->call($client);
-				return $response;
+				
+				return $response->getHead()['RequestId'];
 			}else{
-				throw new Exception($response->getMessage(), 1);		
+				return $response->getMessage();	
 			} 	
 		} catch (Exception $e) {
 			print_r($e);
@@ -168,7 +170,19 @@ class LinioProducts
 				->setQuantity($oProduct->quantity);
 			}
 			$client = ContextusClient::clientConfiguration();
-			return $productCollectionRequest->build()->call($client);
+			$response = $productCollectionRequest->build()->call($client);
+			if ($response instanceof ErrorResponse) {
+				return $response->getMessage();
+			} else {
+				foreach ($oProducts as $oProduct) {
+					if (isset($oProduct->image) AND !empty($oProduct->image)) {
+						foreach ($oProduct->image as $img) {
+							$xCollectionRequest = Endpoints::product()->image($oProduct->sellerSku)->addImage($img);
+						}
+					}
+				}
+				return $response->getFeedId();
+			}
 
 		} catch (Exception $e) {
 			print_r($e);
@@ -181,45 +195,104 @@ class LinioProducts
 	public function getCategoryTree()
 	{
 		$client = ContextusClient::clientConfiguration();
-		return Endpoints::product()->getCategoryTree()->call($client);	
+		$response = Endpoints::product()->getCategoryTree()->call($client);	
+		if ($response instanceof ErrorResponse) {
+		    return $response->getMessage();
+		} else {
+		    return $response->getCategories();
+		}
 	}
 	/**
 	 * Get brands from Linio
-	 * @return 	GetBrands 	
+	 * @return 	Brand  	
 	*/
 	public function getBrands()
 	{
 		$client = ContextusClient::clientConfiguration();
-		return Endpoints::product()->getBrands()->call($client);
+
+		$response = Endpoints::product()->getBrands()->call($client);
+		if ($response instanceof ErrorResponse) {
+			return $response->getMessage();
+		} else {
+			return $response->getBrands();
+		}
 	}
 	/**
-	 * @param 	int 	$xProductID	
-	 * @return 	Product 
-	 */
-	public function getProduct($xProductID)
+	* Get all or a range of products.
+	* @param 	int 	$xProductID	
+	* @return 	Product 
+	*/
+	public function getProducts()
 	{
-		return Endpoints::product()
+		$client = ContextusClient::clientConfiguration();
+		$response = Endpoints::product()
 		->getProducts()
-		->setLimit(3)
 		->build()->call($client);
+		if ($response instanceof ErrorResponse) {
+		    return $response->getMessage();
+		} else {
+			return $response->getProducts();
+		}
 	}
 
 	/**
+	* Returns those products where the search string is contained in the product's SellerSku.
 	 * @param 	array 	$aSellerSkus	
-	 * @return 	array 
+	 * @return 	[products] 
 	 */
 	public function getProductsById($aSellerSkus)
-    {
-    	if (!empty($aSellerSkus)) {
-        	foreach ($aSellerSkus as $xSellerSkus) {
-        		$xMethod = 'GET';
-        		$xAction = 'GetProducts';
-        		$xSearchBy = 'Search';
-        		$xSearch = $xSellerSkus;
-        		$xProduct = ContextusClient::myCurl( $xMethod, $xAction, $xSearchBy, $xSearch);
-        		$xResponse[] = $xProduct->SuccessResponse->Body->Products->Product;
-        	}
-        	return $xResponse;
-        }
-    }    
+	{
+		if (!empty($aSellerSkus)) {
+			foreach ($aSellerSkus as $xSellerSkus) {
+				$xMethod = 'GET';
+				$xAction = 'GetProducts';
+				$xSearchBy = 'Search';
+				$xSearch = $xSellerSkus;
+				$xProduct = ContextusClient::myCurl( $xMethod, $xAction, $xSearchBy, $xSearch);
+				$xResponse[] = $xProduct->SuccessResponse->Body->Products->Product;
+			}
+			return $xResponse;
+		}
+	}  
+	/**
+	* Removes one or more products
+	 * @param 	array 	$oProducts	
+	 * @return 	[products] 
+	 */
+	public function removeProducts($oProducts)
+	{
+		$users_array = array();
+		foreach ($oProducts as $oProduct) {
+			array_push($users_array, ['Product' => ['SellerSku' => $oProduct->sellerSku]]);
+		}
+      	//function defination to convert array to xml
+		function array_to_xml($array, &$xml_user_info) {
+			foreach($array as $key => $value) {
+				if(is_array($value)) {
+					if(!is_numeric($key)){
+						$subnode = $xml_user_info->addChild("$key");
+						array_to_xml($value, $subnode);
+					}else{
+						$subnode = $xml_user_info;
+						array_to_xml($value, $subnode);
+					}
+				}else {
+					$xml_user_info->addChild("$key",htmlspecialchars("$value"));
+				}
+			}
+		}
+		//creating object of SimpleXMLElement
+		$xml_user_info = new SimpleXMLElement("<?xml version='1.0' encoding='UTF-8'?><Request></Request>");
+		//function call to convert array to xml
+		array_to_xml($users_array,$xml_user_info);
+		//saving generated xml file
+		$xml_file = $xml_user_info->asXML();
+		$xMethod = 'POST';
+		$xAction = 'ProductRemove';
+		$xSearchBy = null;
+		$xSearch = null;
+		$xBody = $xml_file;
+		return ContextusClient::myCurl( $xMethod, $xAction, $xSearchBy, $xSearch, $xBody);
+
+	}  
 }

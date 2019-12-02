@@ -7,7 +7,6 @@ use models\ContextusClient\ContextusClient;
 
 
 $response = LinioProducts::getCategoryTree();
-
 /**
  * Recursive print
  *
@@ -17,20 +16,15 @@ $response = LinioProducts::getCategoryTree();
 function printOut($category, $depth)
 {
     // This condition will avoid to have big tree printed out
-    if ($depth > 5) {
-        return;
-    }
-    printf(str_repeat('    ', $depth) . $category->getName() . "\n");
+    // if ($depth > 5) {
+    //     return;
+    // }
+    printf(str_repeat('-', $depth) . $category->getName() . "<br>");
     foreach ($category->getChildren() as $child) {
         printOut($child, $depth + 1);
     }
 }
-if ($response instanceof ErrorResponse) {
-    printf("ERROR !\n");
-    printf("%s\n", $response->getMessage());
-} else {
-    /** @var GetCategoryTree $response */
-    foreach ($response->getCategories() as $cat) {
-        printOut($cat, 0);
-    };
+
+foreach ($response as $xCat) {
+    printOut($xCat, 0);
 }

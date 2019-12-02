@@ -35,9 +35,4 @@ foreach ($products as $oProduct) {
 
 // create products
 $response = LinioProducts::createProduct($oProducts);
-if ($response instanceof SuccessResponseInterface) {
-	printf("Feed has been created. Feed id = %s\n", $response->getHead()['RequestId']);
-} else {
-	/** @var $response ErrorResponse */
-	printf("Error %s\n", $response->getMessage());
-}
+print_r($response);

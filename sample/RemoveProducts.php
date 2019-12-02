@@ -33,6 +33,6 @@ foreach ($products as $oProduct) {
 	$oProducts[] = new LinioProducts( $oProduct);
 }
 // Update products
-$response = LinioProducts::updateProducts($oProducts);
+$response = LinioProducts::removeProducts($oProducts);
 print_r($response);
 ?>

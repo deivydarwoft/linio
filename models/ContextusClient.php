@@ -23,6 +23,9 @@ class ContextusClient
 		$this->apiUserID = $apiUserID;
 		$this->apiKey = $apiKey;
 	}
+    /**
+     * SDK for
+     */
 	public function clientConfiguration()
 	{
         $xContextusClient = Config::getContextusConfig();
@@ -35,8 +38,16 @@ class ContextusClient
 			print_r($e);
 		}	
 	}
-
-	public static function myCurl($xMethod= 'GET', $xAction, $xSearchBy = null, $xSearch = null )
+    /**
+    * HTTP request directed to an endpoint. Depending on what you want to achieve, you will either perform an HTTP request with a GET or POST verb.
+    * @param   String   $xMethod        method.
+    * @param   String   $xAction        Name of the function that is to be called.
+    * @param   String   $xSearchBy      Camp.
+    * @param   String   $xSearch        Value.
+    * @param   String   $xBody          The body transmitted by the POST.
+    * @return  [Order] 
+    */
+	public static function myCurl($xMethod= 'GET', $xAction, $xSearchBy = null, $xSearch = null, $xBody = '' )
     {
         $xContextusClient = Config::getContextusConfig();
         
@@ -90,7 +101,6 @@ class ContextusClient
         // Build Query String
         $queryString = http_build_query($parameters, '', '&', PHP_QUERY_RFC3986);
 
-        // print_r($url."?".$queryString);die;
         // Open cURL connection
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url."?".$queryString);
@@ -98,6 +108,7 @@ class ContextusClient
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION,1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $xBody);
 
         $data = curl_exec($ch);
         $code = curl_error($ch);
@@ -105,7 +116,6 @@ class ContextusClient
         curl_close($ch);
 
         //Para ver la respuesta
-        // print($data);die;
         return json_decode($data);
     }
 }

@@ -3,10 +3,15 @@ namespace models\LinioOrder;
 use \Datetime;
 use models\ContextusClient\ContextusClient;
 /**
- * 
+ * Sales order class
  */
 class LinioOrder
 {
+    /**
+    * Get the order items for a single order. Differs from GetOrders, which gets the customer details.
+    * @param   String   $xOrderId  
+    * @return  [Order] 
+    */
 	public function getOrderById($xOrderId)
     {
     	if ($xOrderId) {
@@ -19,6 +24,11 @@ class LinioOrder
         	return $xResponse;
         }
     }
+    /**
+    * Returns the items for one or more orders.
+    * @param   array   $aOrdersIds  
+    * @return  [Order] 
+    */
     public function getMultipleOrderItems($aOrdersIds)
     {
         if ($xOrderId) {
