@@ -194,13 +194,13 @@ class LinioProducts
 	*/
 	public function getCategoryTree()
 	{
-		$client = ContextusClient::clientConfiguration();
-		$response = Endpoints::product()->getCategoryTree()->call($client);	
-		if ($response instanceof ErrorResponse) {
-		    return $response->getMessage();
-		} else {
-		    return $response->getCategories();
-		}
+		$xMethod = 'GET';
+		$xAction = 'GetCategoryTree';
+		$xSearchBy = null;
+		$xSearch = null;
+		$xProduct = ContextusClient::myCurl($xMethod, $xAction, $xSearchBy, $xSearch);
+		$xResponse[] = $xProduct;
+		return $xResponse;
 	}
 	/**
 	 * Get brands from Linio
@@ -208,14 +208,13 @@ class LinioProducts
 	*/
 	public function getBrands()
 	{
-		$client = ContextusClient::clientConfiguration();
-
-		$response = Endpoints::product()->getBrands()->call($client);
-		if ($response instanceof ErrorResponse) {
-			return $response->getMessage();
-		} else {
-			return $response->getBrands();
-		}
+		$xMethod = 'GET';
+		$xAction = 'GetBrands';
+		$xSearchBy = null;
+		$xSearch = null;
+		$xProduct = ContextusClient::myCurl($xMethod, $xAction, $xSearchBy, $xSearch);
+		$xResponse[] = $xProduct;
+		return $xResponse;
 	}
 	/**
 	* Get all or a range of products.
@@ -293,6 +292,35 @@ class LinioProducts
 		$xSearch = null;
 		$xBody = $xml_file;
 		return ContextusClient::myCurl( $xMethod, $xAction, $xSearchBy, $xSearch, $xBody);
-
-	}  
+	}
+	/**
+	* Returns a list of attributes with options for a given category. It will also display attributes for TaxClass and ShipmentType, with their possible values listed as options.
+	* @param 	Integer 	$xPrimaryCategory	
+	* @return 	array 
+	*/
+	public function getCategoryAttributes($xPrimaryCategory)
+	{
+		$xMethod = 'GET';
+		$xAction = 'GetCategoryAttributes';
+		$xSearchBy = 'PrimaryCategory';
+		$xSearch = $xPrimaryCategory;
+		$xProduct = ContextusClient::myCurl($xMethod, $xAction, $xSearchBy, $xSearch);
+		$xResponse[] = $xProduct;
+		return $xResponse;
+	}
+	/**
+	* 
+	* @param 	Integer 	$xAttributeSet	
+	* @return 	array 
+	*/
+	public function getGetCategoriesByAttributeSet($xAttributeSet)
+	{
+		$xMethod = 'GET';
+		$xAction = 'GetCategoriesByAttributeSet';
+		$xSearchBy = 'AttributeSet';
+		$xSearch = $xAttributeSet;
+		$xProduct = ContextusClient::myCurl($xMethod, $xAction, $xSearchBy, $xSearch);
+		$xResponse[] = $xProduct;
+		return $xResponse;
+	}  	
 }

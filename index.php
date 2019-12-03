@@ -31,19 +31,27 @@
 			<span>Get the list of all product categories.</span>
 		</li>
 		<li>
-			2.3.-<a href="./sample/CreateProducts.php"> createProducts()</a>
+			2.3.-<a href="./sample/GetGetCategoryAttributes.php"> getGetCategoryAttributes()</a>
+			<span>Returns a list of attributes with options for a given category. It will also display attributes for TaxClass and ShipmentType, with their possible values listed as options.</span>
+		</li>
+		<li>
+			2.4.-<a href="./sample/GetCategoriesByAttributeSet.php"> getCategoriesByAttributeSet()</a>
+			<span>.</span>
+		</li>
+		<li>
+			2.5.-<a href="./sample/CreateProducts.php"> createProducts()</a>
 			<span>Create one or multiple new products.</span>
 		</li>
 		<li>
-			2.4.-<a href="./sample/GetProducts.php"> getProducts()</a>
+			2.6.-<a href="./sample/GetProducts.php"> getProducts()</a>
 			<span>Get all products.</span>
 		</li>
 		<li>
-			2.5.-<a href="./sample/UpdateProducts.php"> updateProducts()</a>
+			2.7.-<a href="./sample/UpdateProducts.php"> updateProducts()</a>
 			<span>Update the attributes of one or more existing products.</span>
 		</li>
 		<li>
-			2.6.- <a href="./sample/RemoveProducts.php"> removeProducts()</a>
+			2.8.- <a href="./sample/RemoveProducts.php"> removeProducts()</a>
 			<span>Removes one or more products.</span>
 		</li>
 	</ul>

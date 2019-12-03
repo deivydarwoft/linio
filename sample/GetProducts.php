@@ -9,6 +9,10 @@ use models\ContextusClient\ContextusClient;
 $response = LinioProducts::getProducts();
 
 foreach ($response as $product) {
-	echo "Name: ".$product->getName().", SellerSku: ".$product->getSellerSku().", Price: ".$product->getPrice();
-	echo "<br>";
+	echo "Name: ".$product->getName().
+	"<br>SellerSku: ".$product->getSellerSku().
+	"<br>Price: ".$product->getPrice().
+	"<br>PrimaryCategory: ".$product->getPrimaryCategory().
+	"<br>Categories: ".$product->getCategories();
+	echo "<br>-------------------------<br>";
 }

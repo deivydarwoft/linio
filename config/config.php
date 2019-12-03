@@ -8,7 +8,7 @@ class Config
 	public static function getContextusConfig()
 	{
 		$body = @file_get_contents('../config/configuration.json');
-		// print_r($body);die;
+
 		$data = json_decode($body);
 		http_response_code(200); // Returns 200 OK to the server
 

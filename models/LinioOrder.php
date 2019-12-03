@@ -8,7 +8,7 @@ use models\ContextusClient\ContextusClient;
 class LinioOrder
 {
     /**
-    * Get the order items for a single order. Differs from GetOrders, which gets the customer details.
+    * Get the order items for a single order.
     * @param   String   $xOrderId  
     * @return  [Order] 
     */

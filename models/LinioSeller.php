@@ -38,7 +38,7 @@ class LinioSeller
 		$xBody='';
 		$xCurlResponse = ContextusClient::myCurl($xMethod, $xAction, $xSearchBy, $xSearch, $xBody);
 		$xResponse[] = $xCurlResponse->SuccessResponse->Body;
-		return $xResponse[0]->SuccessResponse->Body;
+		return $xResponse[0];
 	}
 	/**
 	 * Returns sales and orders metrics for a specified period.
