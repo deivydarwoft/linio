@@ -4,8 +4,5 @@
         "guzzlehttp/guzzle": "~6.1",
         "psr/http-message": "~1.0",
         "rocket-labs/sellercenter-sdk-php": "20170331"
-    },
-    "require-dev" : {
-        "phpunit/phpunit": "~4.8,<5.2"
     }
 }
